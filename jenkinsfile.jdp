@@ -1,0 +1,21 @@
+pipeline{
+    agent any
+    stages{
+        stage("PULL"){
+            steps{
+                git branch: 'dev', url: 'https://github.com/shubhamkalsait/radison-hms-frontend.git'
+            }
+        }
+        stage("BUILD"){
+            steps{
+                sh '''npm install
+                        npm run build'''
+            }
+        }
+        stage("DEPLOY"){
+            steps{
+                sh 'aws s3 sync dist/ s3://radison-frontend-bux'
+            }
+        }
+    }
+}
